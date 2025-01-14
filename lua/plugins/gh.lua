@@ -8,7 +8,7 @@ return {
   opts = {
     enable_builtin = true,
     default_to_projects_v2 = false,
-    -- default_merge_method = "squash",
+    default_merge_method = "commit",
     picker = "telescope",
     reviews = {
       auto_show_threads = true, -- automatically show comment threads on cursor move

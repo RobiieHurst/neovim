@@ -28,6 +28,13 @@ return {
       {
         name = "geolytix",
         path = "~/Documents/geolytix.nosync/geolytix-vault/",
+        overrides = {
+          templates = {
+            folder = "Templates",
+            date_format = "%Y-%m-%d-%a",
+            time_format = "%H:%M",
+          },
+        },
       },
       {
         name = "sight-script",
