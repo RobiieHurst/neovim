@@ -15,8 +15,41 @@ return {
         easing = "linear",
         fps = 120, -- frames per second. Global setting for all animations
       },
+
+      styles = {
+        dashbaord = {
+          zindex = 10,
+          height = 0,
+          width = 0,
+          bo = {
+            bufhidden = "wipe",
+            buftype = "nofile",
+            buflisted = false,
+            filetype = "snacks_dashboard",
+            swapfile = false,
+            undofile = false,
+          },
+          wo = {
+            colorcolumn = "",
+            cursorcolumn = false,
+            cursorline = false,
+            foldmethod = "manual",
+            list = false,
+            number = false,
+            relativenumber = false,
+            sidescrolloff = 0,
+            signcolumn = "no",
+            spell = false,
+            statuscolumn = "",
+            statusline = "",
+            winbar = "",
+            winhighlight = "Normal:SnacksDashboardNormal,NormalFloat:SnacksDashboardNormal",
+            wrap = false,
+          },
+        },
+      },
       dashboard = {
-        width = 60,
+        width = 100,
         row = nil, -- dashboard position. nil for center
         col = nil, -- dashboard position. nil for center
         pane_gap = 4, -- empty columns between vertical panes
@@ -54,47 +87,18 @@ return {
 ██║  ██║╚██████╔╝██████╔╝██████╔╝██║███████╗
 ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═════╝ ╚═╝╚══════╝]],
         },
-        -- item field formatters
-        formats = {
-          icon = function(item)
-            if item.file and item.icon == "file" or item.icon == "directory" then
-              return M.icon(item.file, item.icon)
-            end
-            return { item.icon, width = 2, hl = "icon" }
-          end,
-          footer = { "%s", align = "center" },
-          header = { "%s", align = "center" },
-          file = function(item, ctx)
-            local fname = vim.fn.fnamemodify(item.file, ":~")
-            fname = ctx.width and #fname > ctx.width and vim.fn.pathshorten(fname) or fname
-            if #fname > ctx.width then
-              local dir = vim.fn.fnamemodify(fname, ":h")
-              local file = vim.fn.fnamemodify(fname, ":t")
-              if dir and file then
-                file = file:sub(-(ctx.width - #dir - 2))
-                fname = dir .. "/…" .. file
-              end
-            end
-            local dir, file = fname:match("^(.*)/(.+)$")
-            return dir and { { dir .. "/", hl = "dir" }, { file, hl = "file" } } or { { fname, hl = "file" } }
-          end,
-        },
         sections = {
           { section = "header" },
+          -- {
+          --   pane = 2,
+          --   section = "terminal",
+          --   cmd = "colorscript -e square",
+          --   height = 4,
+          -- },
+          -- { section = "keys", gap = 1, padding = 1 },
           {
-            pane = 2,
-            section = "terminal",
-            cmd = "colorscript -e crunch",
-            height = 8,
-            padding = 1,
-          },
-          { section = "keys", gap = 1, padding = 1 },
-          {
-            pane = 2,
             icon = " ",
             desc = "Browse Repo",
-            padding = 1,
-            key = "b",
             action = function()
               Snacks.gitbrowse()
             end,
@@ -108,31 +112,29 @@ return {
                 action = function()
                   vim.ui.open("https://github.com/notifications")
                 end,
-                key = "n",
+                -- key = "n",
                 icon = " ",
-                height = 5,
+                height = 4,
                 enabled = true,
               },
-              -- {
-              --   title = "Open Issues",
-              --   cmd = "gh issue list -L 3",
-              --   key = "i",
-              --   action = function()
-              --     vim.fn.jobstart("gh issue list --web", { detach = true })
-              --   end,
-              --   icon = " ",
-              --   height = 7,
-              -- },
-              -- {
-              --   icon = " ",
-              --   title = "Open PRs",
-              --   cmd = "gh pr list -L 3",
-              --   key = "p",
-              --   action = function()
-              --     vim.fn.jobstart("gh pr list --web", { detach = true })
-              --   end,
-              --   height = 7,
-              -- },
+              {
+                title = "Open Issues",
+                cmd = [[gh issue list -L 3 --json number,title,updatedAt --template '{{range .}}{{tablerow (printf "#%v" .number | autocolor "green") .title (timeago .updatedAt)}}{{end}}']],
+                action = function()
+                  vim.fn.jobstart("gh issue list --web", { detach = true })
+                end,
+                icon = " ",
+                height = 5,
+              },
+              {
+                icon = " ",
+                title = "Open PRs",
+                cmd = [[gh pr list -L 3 --json number,title,headRefName,updatedAt --template '{{range .}}{{tablerow (printf "#%v" .number | autocolor "green") .title .headRefName (timeago .updatedAt)}}{{end}}']],
+                action = function()
+                  vim.fn.jobstart("gh pr list --web", { detach = true })
+                end,
+                height = 5,
+              },
               {
                 icon = " ",
                 title = "Git Status",
@@ -142,7 +144,6 @@ return {
             }
             return vim.tbl_map(function(cmd)
               return vim.tbl_extend("force", {
-                pane = 2,
                 section = "terminal",
                 enabled = in_git,
                 padding = 1,

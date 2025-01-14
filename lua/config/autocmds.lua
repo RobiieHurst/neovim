@@ -11,3 +11,5 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     vim.b.autoformat = false
   end,
 })
+
+-- vim.api.nvim_command("FzfLua register_ui_select")
