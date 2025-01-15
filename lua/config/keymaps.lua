@@ -12,3 +12,6 @@ keymap.set("n", "<C-S-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Heig
 keymap.set("n", "<C-S-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
 keymap.set("n", "<C-S-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
 keymap.set("n", "<C-S-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
+
+keymap.set("i", "@", "@<C-x><C-o>", { silent = true, buffer = true })
+keymap.set("i", "#", "#<C-x><C-o>", { silent = true, buffer = true })
