@@ -15,3 +15,7 @@ keymap.set("n", "<C-S-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase
 
 keymap.set("i", "@", "@<C-x><C-o>", { silent = true, buffer = true })
 keymap.set("i", "#", "#<C-x><C-o>", { silent = true, buffer = true })
+
+keymap.set("i", "<C-k>t", "├── ", { desc = "Tree branch" })
+keymap.set("i", "<C-k>l", "└── ", { desc = "Tree last branch" })
+keymap.set("i", "<C-k>v", "│   ", { desc = "Tree vertical" })
