@@ -40,10 +40,25 @@ return {
         table.insert(dap.configurations[lang], {
           type = "pwa-chrome",
           request = "launch",
-          name = "Launch Chrome",
-          url = "http://localhost:3000",
+          name = "Launch Chrome against localhost",
+          url = "http://localhost:3001",
+          webRoot = "${workspaceFolder}",
           sourceMaps = true,
+          -- protocol = "inspector",
         })
+      end
+
+      require("dap.repl").config = {
+        highlight = true,
+        force_unicode = true,
+        encoding = "utf-8",
+        wrap = false,
+      }
+
+      dap.listeners.before.event_output["remove_ansi"] = function(_, body)
+        if body.output then
+          body.output = body.output:gsub("\27%[[0-9;]*m", "")
+        end
       end
     end,
 
@@ -93,28 +108,48 @@ return {
     -- end,
   },
 
-  -- {
-  --   "rcarriga/nvim-dap-ui",
-  --   dependencies = { "nvim-neotest/nvim-nio" },
-  -- -- stylua: ignore
-  -- keys = {
-  --   { "<leader>du", function() require("dapui").toggle({ }) end, desc = "Dap UI" },
-  --   { "<leader>de", function() require("dapui").eval() end, desc = "Eval", mode = {"n", "v"} },
-  -- },
-  --   opts = {},
-  --   config = function(_, opts)
-  --     local dap = require("dap")
-  --     local dapui = require("dapui")
-  --     dapui.setup(opts)
-  --     dap.listeners.after.event_initialized["dapui_config"] = function()
-  --       dapui.open({})
-  --     end
-  --     dap.listeners.before.event_terminated["dapui_config"] = function()
-  --       dapui.close({})
-  --     end
-  --     dap.listeners.before.event_exited["dapui_config"] = function()
-  --       dapui.close({})
-  --     end
-  --   end,
-  -- },
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = { "nvim-neotest/nvim-nio" },
+  -- stylua: ignore
+  keys = {
+    { "<leader>du", function() require("dapui").toggle({ }) end, desc = "Dap UI" },
+    { "<leader>de", function() require("dapui").eval() end, desc = "Eval", mode = {"n", "v"} },
+  },
+    opts = {
+      layouts = {
+        {
+          elements = {
+            { id = "scopes", size = 0.80 },
+            { id = "watches", size = 0.10 },
+            { id = "breakpoints", size = 0.10 },
+            -- { id = "stacks", size = 0.25 },
+          },
+          position = "left",
+          size = 40,
+        },
+        {
+          elements = {
+            { id = "repl", size = 1.0 },
+          },
+          position = "bottom",
+          size = 10,
+        },
+      },
+    },
+    config = function(_, opts)
+      local dap = require("dap")
+      local dapui = require("dapui")
+      dapui.setup(opts)
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open({})
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close({})
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close({})
+      end
+    end,
+  },
 }

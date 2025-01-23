@@ -5,7 +5,8 @@
     "MD024": false, // Multiple headers with same content
     "MD033": false, // Inline HTML
     "MD041": true, // First line h1
-    "MD046": false // Code block style
+    "MD046": false, // Code block style
+    "MD028": false // Code block style
   },
   "ignores": ["node_modules", ".git"]
 }

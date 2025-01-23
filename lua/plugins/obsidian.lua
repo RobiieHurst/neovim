@@ -44,6 +44,10 @@ return {
         name = "work",
         path = "~/Documents/obsidian/robs/",
       },
+      {
+        name = "personal",
+        path = "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Rob/",
+      },
     },
 
     -- Optional, set the log level for obsidian.nvim. This is an integer corresponding to one of the log
