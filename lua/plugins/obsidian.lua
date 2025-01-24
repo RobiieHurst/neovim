@@ -47,6 +47,13 @@ return {
       {
         name = "personal",
         path = "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Rob/",
+        overrides = {
+          templates = {
+            folder = "templates",
+            date_format = "%Y-%m-%d-%a",
+            time_format = "%H:%M",
+          },
+        },
       },
     },
 
@@ -64,7 +71,7 @@ return {
       -- Optional, default tags to add to each new daily note created.
       default_tags = { "daily-notes" },
       -- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
-      template = nil,
+      template = "daily.md",
     },
 
     -- Optional, configure key mappings. These are the defaults. If you don't want to set any keymappings this
