@@ -46,6 +46,20 @@ return {
           sourceMaps = true,
           -- protocol = "inspector",
         })
+
+        table.insert(dap.configurations[lang], {
+          type = "pwa-node",
+          request = "launch",
+          name = "Launch Bun Tests",
+          runtimeExecutable = "bun",
+          runtimeArgs = { "run", "tests" },
+          program = "${file}",
+          cwd = "${workspaceFolder}",
+          sourceMaps = true,
+          protocol = "inspector",
+          console = "integratedTerminal",
+          skipFiles = { "<node_internals>/**" },
+        })
       end
 
       require("dap.repl").config = {
