@@ -50,3 +50,11 @@ For detailed customization options, refer to the [LazyVim documentation](https:/
 ```
 
 ````
+
+Name ideas:
+
+“The Deg” - So ‘Deg’ ie tire degradation. Thinking about a play on “The dig” like what’s the happening or what’s the scoop?
+"Maria Caré F1 Podcast" - What sainz said :)
+"CrashCrash" - Could be come cool crash gate influences
+"No grip" - Play on what max and george fought about last season (Can be pretty timeless). Also implies a fun chilled vibe.
+"Simply Lovely" - banter between max and lando. Also can be timeless.

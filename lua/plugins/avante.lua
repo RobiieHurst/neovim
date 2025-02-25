@@ -7,6 +7,15 @@ return {
     -- add any opts here
     -- for example
     hints = { enabled = false },
+    windows = {
+      ask = {
+        floating = false, -- Open the 'AvanteAsk' prompt in a floating window
+        start_insert = false, -- Start insert mode when opening the ask window
+        border = "rounded",
+        ---@type "ours" | "theirs"
+        focus_on_apply = "ours", -- which diff to focus after applying
+      },
+    },
     provider = "googleFlash",
     vendors = {
       googleFlash = {
@@ -14,6 +23,12 @@ return {
         endpoint = "https://openrouter.ai/api/v1",
         api_key_name = "OPENROUTER_API_KEY",
         model = "google/gemini-2.0-flash-001",
+      },
+      newClaude = {
+        __inherited_from = "openai",
+        endpoint = "https://openrouter.ai/api/v1",
+        api_key_name = "OPENROUTER_API_KEY",
+        model = "anthropic/claude-3.7-sonnet",
       },
       deepseek = {
         __inherited_from = "openai",
