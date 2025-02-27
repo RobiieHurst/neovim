@@ -21,7 +21,8 @@ return {
                 json = { "prettier" },
                 css = { "prettier" },
                 html = { "prettier" },
-                lua = { "stylelua" }
+                lua = { "stylelua" },
+                markdown = { "markdownlint-cli2" }
             },
             format_on_save = {
                 timeout_ms = 500,
@@ -44,13 +45,23 @@ return {
                 "lua_ls",
                 "rust_analyzer",
                 "gopls",
-                "eslint"
+                "eslint",
+                "marksman"
             },
             handlers = {
                 function(server_name) -- default handler (optional)
                     require("lspconfig")[server_name].setup {
                         capabilities = capabilities
                     }
+                end,
+
+                marksman = function()
+                    print("setting up marksman")
+                    local lspconfig = require("lspconfig")
+                    lspconfig.marksman.setup {
+                        capabilities = capabilities,
+                    }
+                    print("marksman setup complete")
                 end,
 
                 zls = function()
@@ -92,7 +103,7 @@ return {
                             })
                         end,
                     })
-                end
+                end,
             }
         })
 
