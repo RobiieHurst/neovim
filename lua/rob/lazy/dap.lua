@@ -78,6 +78,19 @@ return {
             vim.keymap.set("n", "<leader>B", function()
                 dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
             end, { desc = "Debug: Set Conditional Breakpoint" })
+
+            require("dap.repl").config = {
+                highlight = true,
+                force_unicode = true,
+                encoding = "utf-8",
+                wrap = false,
+            }
+
+            dap.listeners.before.event_output["remove_ansi"] = function(_, body)
+                if body.output then
+                    body.output = body.output:gsub("\27%[[0-9;]*m", "")
+                end
+            end
         end
     },
 
@@ -94,7 +107,7 @@ return {
                         { id = name },
                     },
                     enter = true,
-                    size = 40,
+                    size = 100,
                     position = "right",
                 }
             end
