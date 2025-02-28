@@ -30,6 +30,23 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
 
+-- Configure clipboard to use system clipboard
+vim.opt.clipboard = "unnamedplus"
+
+-- Set up system clipboard integration
+vim.g.clipboard = {
+    name = "macOS-clipboard",
+    copy = {
+        ["+"] = "pbcopy",
+        ["*"] = "pbcopy",
+    },
+    paste = {
+        ["+"] = "pbpaste",
+        ["*"] = "pbpaste",
+    },
+    cache_enabled = 0,
+}
+
 -- Enable the option to require a Prettier config file
 -- If no prettier config file is found, the formatter will not be used
 vim.g.lazyvim_prettier_needs_config = false

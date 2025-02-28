@@ -9,14 +9,14 @@ return {
         hints = { enabled = false },
         windows = {
             ask = {
-                floating = false, -- Open the 'AvanteAsk' prompt in a floating window
+                floating = false,     -- Open the 'AvanteAsk' prompt in a floating window
                 start_insert = false, -- Start insert mode when opening the ask window
                 border = "rounded",
                 ---@type "ours" | "theirs"
                 focus_on_apply = "ours", -- which diff to focus after applying
             },
         },
-        provider = "googleFlash",
+        provider = "newClaude",
         vendors = {
             googleFlash = {
                 __inherited_from = "openai",
@@ -55,12 +55,12 @@ return {
         "nvim-lua/plenary.nvim",
         "MunifTanjim/nui.nvim",
         --- The below dependencies are optional,
-        "echasnovski/mini.pick",     -- for file_selector provider mini.pick
+        "echasnovski/mini.pick",         -- for file_selector provider mini.pick
         "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-        "hrsh7th/nvim-cmp",          -- autocompletion for avante commands and mentions
-        "ibhagwan/fzf-lua",          -- for file_selector provider fzf
-        "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-        "zbirenbaum/copilot.lua",    -- for providers='copilot'
+        "hrsh7th/nvim-cmp",              -- autocompletion for avante commands and mentions
+        "ibhagwan/fzf-lua",              -- for file_selector provider fzf
+        "nvim-tree/nvim-web-devicons",   -- or echasnovski/mini.icons
+        "zbirenbaum/copilot.lua",        -- for providers='copilot'
         {
             -- support for image pasting
             "HakonHarnes/img-clip.nvim",
