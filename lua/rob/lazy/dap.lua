@@ -54,10 +54,29 @@ return {
                 }
             end
 
+            -- Add Node.js adapter (using the same js-debug-adapter)
+            if not dap.adapters["pwa-node"] then
+                dap.adapters["pwa-node"] = {
+                    type = "server",
+                    host = "localhost",
+                    port = "${port}",
+                    executable = {
+                        command = "node",
+                        args = {
+                            require("mason-registry").get_package("js-debug-adapter"):get_install_path()
+                            .. "/js-debug/src/dapDebugServer.js",
+                            "${port}",
+                        },
+                    },
+                }
+            end
+
             for _, lang in ipairs({
                 "javascript",
             }) do
                 dap.configurations[lang] = dap.configurations[lang] or {}
+
+                -- Chrome browser debugging
                 table.insert(dap.configurations[lang], {
                     type = "pwa-chrome",
                     request = "launch",
@@ -66,6 +85,56 @@ return {
                     webRoot = "${workspaceFolder}",
                     sourceMaps = true,
                     -- protocol = "inspector",
+                })
+
+                -- Node.js debugging
+                table.insert(dap.configurations[lang], {
+                    type = "pwa-node",
+                    request = "launch",
+                    name = "Launch Node.js Program",
+                    program = "${file}",
+                    cwd = "${workspaceFolder}",
+                    sourceMaps = true,
+                    skipFiles = { "<node_internals>/**" },
+                    resolveSourceMapLocations = {
+                        "${workspaceFolder}/**",
+                        "!**/node_modules/**",
+                    },
+                })
+
+                -- Node.js debugging with full project context
+                table.insert(dap.configurations[lang], {
+                    type = "pwa-node",
+                    request = "launch",
+                    name = "Launch Node.js App (with static files)",
+                    program = "${file}",
+                    cwd = "${workspaceFolder}",
+                    sourceMaps = true,
+                    skipFiles = { "<node_internals>/**" },
+                    resolveSourceMapLocations = {
+                        "${workspaceFolder}/**",
+                        "!**/node_modules/**",
+                    },
+                    runtimeArgs = {
+                        "--preserve-symlinks",
+                        "--preserve-symlinks-main",
+                    },
+                    env = {
+                        NODE_ENV = "development"
+                    },
+                    console = "integratedTerminal",
+                    internalConsoleOptions = "neverOpen",
+                })
+
+                -- Attach to Node.js process
+                table.insert(dap.configurations[lang], {
+                    type = "pwa-node",
+                    request = "attach",
+                    name = "Attach to Node.js Process",
+                    processId = require('dap.utils').pick_process,
+                    cwd = "${workspaceFolder}",
+                    sourceMaps = true,
+                    skipFiles = { "<node_internals>/**" },
                 })
             end
 
@@ -107,7 +176,7 @@ return {
                         { id = name },
                     },
                     enter = true,
-                    size = 100,
+                    size = 120,
                     position = "right",
                 }
             end
@@ -191,6 +260,7 @@ return {
             require("mason-nvim-dap").setup({
                 ensure_installed = {
                     "delve",
+                    "js-debug-adapter",
                 },
                 automatic_installation = true,
                 handlers = {

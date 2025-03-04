@@ -22,11 +22,11 @@ return {
                 css = { "prettier" },
                 html = { "prettier" },
                 lua = { "stylelua" },
-                markdown = { "markdownlint-cli2" }
+                markdown = { "prettier" }
             },
             format_on_save = {
                 timeout_ms = 500,
-                lsp_fallback = true,
+                lsp_fallback = false,
             },
         })
 
@@ -56,12 +56,10 @@ return {
                 end,
 
                 marksman = function()
-                    print("setting up marksman")
                     local lspconfig = require("lspconfig")
                     lspconfig.marksman.setup {
                         capabilities = capabilities,
                     }
-                    print("marksman setup complete")
                 end,
 
                 zls = function()
