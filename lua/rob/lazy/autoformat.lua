@@ -13,20 +13,20 @@ return {
 			desc = "Format buffer",
 		},
 	},
-	-- This will provide type hinting with LuaLS
-	---@module "conform"
-	---@type conform.setupOpts
 	opts = {
 		-- Define your formatters
 		formatters_by_ft = {
+	-- This will provide type hinting with LuaLS
+	---@module "conform"
+	---@type conform.setupOpts
 			lua = { "stylua" },
 			-- You can customize some of the format options for the filetype (:help conform.format)
 			rust = { "rustfmt", lsp_format = "fallback" },
 			-- Conform will run the first available formatter
-			javascript = { "prettierd", "prettier", stop_after_first = true },
-			json = { "prettier" },
-			css = { "prettier" },
-			html = { "prettier" },
+			javascript = { "biome-check" },
+			json = { "biome-check" },
+			css ={ "biome-check" },
+			html = { "biome-check" },
 			markdown = { "prettier" },
 		},
 		-- Set default options
@@ -34,8 +34,7 @@ return {
 			lsp_format = "fallback",
 		},
 		-- -- Set up format-on-save
-		-- format_on_save = { timeout_ms = 500 },
-		-- Customize formatters
+		format_on_save = { timeout_ms = 500 },
 		formatters = {
 			shfmt = {
 				prepend_args = { "-i", "2" },

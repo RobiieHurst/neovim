@@ -31,7 +31,7 @@ return {
 				"lua_ls",
 				"rust_analyzer",
 				"gopls",
-				"eslint",
+				"biome",
 				"marksman",
 			},
 			handlers = {
@@ -77,16 +77,9 @@ return {
 						},
 					})
 				end,
-				eslint = function()
+				biome = function()
 					local lspconfig = require("lspconfig")
-					lspconfig.eslint.setup({
-						on_attach = function(client, bufnr)
-							vim.api.nvim_create_autocmd("BufWritePre", {
-								buffer = bufnr,
-								command = "EslintFixAll",
-							})
-						end,
-					})
+					lspconfig.biome.setup({})
 				end,
 			},
 		})

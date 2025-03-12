@@ -19,7 +19,7 @@ The `node:crypto` module provides cryptographic functionality that includes a se
 
 ### [web crypto](https://nodejs.org/api/webcrypto.html#web-crypto-api)
 
-Is an implementation of the standard [Web Crypto API](https://www.w3.org/TR/WebCryptoAPI/).
+    Is an implementation of the standard [Web Crypto API](https://www.w3.org/TR/WebCryptoAPI/).
 
 ## Conclusion
 
