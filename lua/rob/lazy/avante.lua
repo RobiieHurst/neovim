@@ -16,7 +16,7 @@ return {
 				focus_on_apply = "ours", -- which diff to focus after applying
 			},
 		},
-		provider = "newClaude",
+		provider = "googleFlash",
 		vendors = {
 			googleFlash = {
 				__inherited_from = "openai",

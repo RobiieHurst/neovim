@@ -16,16 +16,14 @@ return {
 	opts = {
 		-- Define your formatters
 		formatters_by_ft = {
-	-- This will provide type hinting with LuaLS
-	---@module "conform"
-	---@type conform.setupOpts
+			-- This will provide type hinting with LuaLS
 			lua = { "stylua" },
 			-- You can customize some of the format options for the filetype (:help conform.format)
 			rust = { "rustfmt", lsp_format = "fallback" },
 			-- Conform will run the first available formatter
 			javascript = { "biome-check" },
 			json = { "biome-check" },
-			css ={ "biome-check" },
+			css = { "biome-check" },
 			html = { "biome-check" },
 			markdown = { "prettier" },
 		},
