@@ -16,12 +16,12 @@ return {
 		config = function()
 			local dap = require("dap")
 
-		  -- setup dap config by VsCode launch.json file
-		  local vscode = require("dap.ext.vscode")
-		  local json = require("plenary.json")
-		  vscode.json_decode = function(str)
-		    return vim.json.decode(json.json_strip_comments(str))
-		  end
+			-- setup dap config by VsCode launch.json file
+			local vscode = require("dap.ext.vscode")
+			local json = require("plenary.json")
+			vscode.json_decode = function(str)
+				return vim.json.decode(json.json_strip_comments(str))
+			end
 
 			if not dap.adapters["pwa-chrome"] then
 				dap.adapters["pwa-chrome"] = {
@@ -81,7 +81,6 @@ return {
 					skipFiles = { "<node_internals>/**" },
 				})
 			end
-
 
 			dap.set_log_level("DEBUG")
 			vim.keymap.set("n", "<F8>", dap.continue, { desc = "Debug: Continue" })
@@ -160,7 +159,7 @@ return {
 			local dapui = require("dapui")
 			dapui.setup(opts)
 			dap.listeners.after.event_initialized["dapui_config"] = function()
-			  -- dapui.open({})
+				-- dapui.open({})
 			end
 			dap.listeners.before.event_terminated["dapui_config"] = function()
 				-- dapui.close({})

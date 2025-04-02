@@ -21,18 +21,13 @@ return {
 			-- You can customize some of the format options for the filetype (:help conform.format)
 			rust = { "rustfmt", lsp_format = "fallback" },
 			-- Conform will run the first available formatter
-			javascript = { "biome-check" },
-			json = { "biome-check" },
-			css = { "biome-check" },
-			html = { "biome-check" },
+			javascript = { "biome" },
+			json = { "biome" },
+			css = { "biome" },
+			html = { "prettier" },
 			markdown = { "prettier" },
 		},
-		-- Set default options
-		default_format_opts = {
-			lsp_format = "fallback",
-		},
-		-- -- Set up format-on-save
-		format_on_save = { timeout_ms = 500 },
+		-- format_on_save = { timeout_ms = 500 },
 		formatters = {
 			shfmt = {
 				prepend_args = { "-i", "2" },
