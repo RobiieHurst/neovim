@@ -16,7 +16,7 @@ return {
 				focus_on_apply = "ours", -- which diff to focus after applying
 			},
 		},
-		provider = "newClaude",
+		provider = "openFour",
 		vendors = {
 			googleFlash = {
 				__inherited_from = "openai",
@@ -41,6 +41,12 @@ return {
 				endpoint = "https://openrouter.ai/api/v1",
 				api_key_name = "OPENROUTER_API_KEY",
 				model = "google/gemini-2.5-pro-exp-03-25:free",
+      },
+      openFour= {
+				__inherited_from = "openai",
+				endpoint = "https://openrouter.ai/api/v1",
+				api_key_name = "OPENROUTER_API_KEY",
+				model = "openai/gpt-4.1",
       }
 		},
 		-- openai = {

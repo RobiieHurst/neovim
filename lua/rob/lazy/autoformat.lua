@@ -4,7 +4,6 @@ return {
 	cmd = { "ConformInfo" },
 	keys = {
 		{
-			-- Customize or remove this keymap to your liking
 			"<leader>f",
 			function()
 				require("conform").format({ async = true })
@@ -24,11 +23,20 @@ return {
 			javascript = { "biome" },
 			json = { "biome" },
 			css = { "biome" },
-			html = { "prettier" },
+			html = { "biome" },
 			markdown = { "prettier" },
 		},
-		-- format_on_save = { timeout_ms = 500 },
+		format_on_save = { timeout_ms = 500, lsp_format = "never" },
 		formatters = {
+			biome = {
+				command = vim.fn.resolve(vim.fn.findfile("node_modules/.bin/biome", vim.fn.getcwd() .. ";")) or "biome",
+				args = {
+					"check",
+					"--write",
+					"--stdin-file-path",
+					"$FILENAME",
+				},
+			},
 			shfmt = {
 				prepend_args = { "-i", "2" },
 			},

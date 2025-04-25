@@ -25,13 +25,37 @@ return {
 		)
 
 		require("fidget").setup({})
+
+		local lspconfig = require("lspconfig")
+		local util = require("lspconfig.util")
+
+		-- Function to resolve local Biome binary
+		local function resolve_biome()
+			local biome_path = vim.fn.findfile("node_modules/.bin/biome", vim.fn.getcwd() .. ";")
+			if biome_path ~= "" then
+				return vim.fn.resolve(biome_path)
+			end
+			vim.notify("Local Biome not found, falling back to global", vim.log.levels.WARN)
+			return "biome"
+		end
+
+		lspconfig.biome.setup({
+			cmd = { resolve_biome(), "lsp-proxy" },
+			root_dir = util.root_pattern("biome.json", "package.json"),
+			settings = {
+				action = {
+					useSortedKeys = "on",
+					useSortedImports = "on",
+				},
+			},
+		})
+
 		require("mason").setup()
 		require("mason-lspconfig").setup({
 			ensure_installed = {
 				"lua_ls",
 				"rust_analyzer",
 				"gopls",
-				"biome",
 				"marksman",
 			},
 			handlers = {
@@ -76,11 +100,6 @@ return {
 							},
 						},
 					})
-				end,
-
-				biome = function()
-					local lspconfig = require("lspconfig")
-					lspconfig.biome.setup({})
 				end,
 			},
 		})
