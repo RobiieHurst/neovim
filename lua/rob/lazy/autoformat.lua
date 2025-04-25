@@ -24,6 +24,7 @@ return {
 			json = { "biome" },
 			css = { "biome" },
 			html = { "biome" },
+			vue = { "biome" },
 			markdown = { "prettier" },
 		},
 		format_on_save = { timeout_ms = 500, lsp_format = "never" },
