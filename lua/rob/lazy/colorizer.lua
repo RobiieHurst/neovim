@@ -14,6 +14,7 @@ return {
 		"html",
 		"json",
 		"sql",
+		"vue",
 	},
-	ft = { "css", "javascript", "html", "json", "sql" },
+	ft = { "css", "javascript", "html", "json", "sql", "vue" },
 }
