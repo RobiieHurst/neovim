@@ -21,6 +21,9 @@ return {
 			rust = { "rustfmt", lsp_format = "fallback" },
 			-- Conform will run the first available formatter
 			javascript = { "biome" },
+			typescript = { "biome" },
+			typescriptreact = { "biome" },
+			javascriptreact = { "biome" },
 			json = { "biome" },
 			css = { "biome" },
 			html = { "biome" },

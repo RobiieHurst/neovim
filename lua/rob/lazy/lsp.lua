@@ -129,6 +129,9 @@ return {
 
 		vim.diagnostic.config({
 			-- update_in_insert = true,
+			virtual_text = true,
+			signs = true,
+			underline = true,
 			float = {
 				focusable = false,
 				style = "minimal",
