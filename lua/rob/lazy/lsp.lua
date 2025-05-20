@@ -57,11 +57,26 @@ return {
 				"rust_analyzer",
 				"gopls",
 				"marksman",
+				"ts_ls",
 			},
 			handlers = {
 				function(server_name) -- default handler (optional)
 					require("lspconfig")[server_name].setup({
 						capabilities = capabilities,
+					})
+				end,
+
+				ts_ls = function()
+					local lspconfig = require("lspconfig")
+					lspconfig.ts_ls.setup({
+						filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+						root_dir = require("lspconfig.util").root_pattern("jsconfig.json", "tsconfig.json", ".git"),
+						init_options = {
+							preferences = {
+								includeCompletionsWithSnippetText = true,
+								includeCompletionsForModuleExports = true,
+							},
+						},
 					})
 				end,
 
