@@ -2,25 +2,17 @@ vim.api.nvim_create_augroup("DapGroup", { clear = true })
 
 local function navigate(args)
 	local buffer = args.buf
-
-	local wid = nil
-	local win_ids = vim.api.nvim_list_wins() -- Get all window IDs
+	local win_ids = vim.api.nvim_list_wins()
 	for _, win_id in ipairs(win_ids) do
-		local win_bufnr = vim.api.nvim_win_get_buf(win_id)
-		if win_bufnr == buffer then
-			wid = win_id
+		if vim.api.nvim_win_get_buf(win_id) == buffer then
+			vim.schedule(function()
+				if vim.api.nvim_win_is_valid(win_id) then
+					vim.api.nvim_set_current_win(win_id)
+				end
+			end)
+			return
 		end
 	end
-
-	if wid == nil then
-		return
-	end
-
-	vim.schedule(function()
-		if vim.api.nvim_win_is_valid(wid) then
-			vim.api.nvim_set_current_win(wid)
-		end
-	end)
 end
 
 local function create_nav_options(name)
@@ -35,46 +27,51 @@ return {
 	{
 		"mfussenegger/nvim-dap",
 		lazy = false,
+		dependencies = {
+			"mxsdev/nvim-dap-vscode-js",
+			{
+				"microsoft/vscode-js-debug",
+				build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
+			},
+		},
 		config = function()
 			local dap = require("dap")
 
-			if not dap.adapters["pwa-chrome"] then
-				dap.adapters["pwa-chrome"] = {
-					type = "server",
-					host = "localhost",
-					port = "${port}",
-					executable = {
-						command = "node",
-						args = {
-							require("mason-registry").get_package("js-debug-adapter"):get_install_path()
-								.. "/js-debug/src/dapDebugServer.js",
-							"${port}",
+			-- Configure nvim-dap-vscode-js
+			require("dap-vscode-js").setup({
+				debugger_path = vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter",
+				adapters = {
+					"pwa-node",
+					"pwa-chrome",
+					"pwa-msedge",
+					"node-terminal",
+					"pwa-extensionHost",
+					"node",
+					"chrome",
+				},
+			})
+
+			-- Adapter configurations (only if not handled by mason-nvim-dap)
+			for _, adapter in ipairs({ "pwa-node", "pwa-chrome" }) do
+				if not dap.adapters[adapter] then
+					dap.adapters[adapter] = {
+						type = "server",
+						host = "localhost",
+						port = "${port}",
+						executable = {
+							command = "node",
+							args = {
+								vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug-adapter.js",
+								"${port}",
+							},
 						},
-					},
-				}
+					}
+				end
 			end
 
-			-- Add Node.js adapter (using the same js-debug-adapter)
-			if not dap.adapters["pwa-node"] then
-				dap.adapters["pwa-node"] = {
-					type = "server",
-					host = "localhost",
-					port = "${port}",
-					executable = {
-						command = "node",
-						args = {
-							require("mason-registry").get_package("js-debug-adapter"):get_install_path()
-								.. "/js-debug/src/dapDebugServer.js",
-							"${port}",
-						},
-					},
-				}
-			end
-
-			for _, lang in ipairs({}) do
+			-- Debugging configurations
+			for _, lang in ipairs({ "javascript", "typescript" }) do
 				dap.configurations[lang] = dap.configurations[lang] or {}
-
-				-- Chrome browser debugging
 				table.insert(dap.configurations[lang], {
 					type = "pwa-chrome",
 					request = "launch",
@@ -82,10 +79,7 @@ return {
 					url = "http://localhost:3001",
 					webRoot = "${workspaceFolder}",
 					sourceMaps = true,
-					-- protocol = "inspector",
 				})
-
-				-- Node.js debugging
 				table.insert(dap.configurations[lang], {
 					type = "pwa-node",
 					request = "launch",
@@ -99,8 +93,6 @@ return {
 						"!**/node_modules/**",
 					},
 				})
-
-				-- Node.js debugging with full project context
 				table.insert(dap.configurations[lang], {
 					type = "pwa-node",
 					request = "launch",
@@ -123,8 +115,6 @@ return {
 					console = "integratedTerminal",
 					internalConsoleOptions = "neverOpen",
 				})
-
-				-- Attach to Node.js process
 				table.insert(dap.configurations[lang], {
 					type = "pwa-node",
 					request = "attach",
@@ -146,13 +136,6 @@ return {
 				dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
 			end, { desc = "Debug: Set Conditional Breakpoint" })
 
-			require("dap.repl").config = {
-				highlight = true,
-				force_unicode = true,
-				encoding = "utf-8",
-				wrap = false,
-			}
-
 			dap.listeners.before.event_output["remove_ansi"] = function(_, body)
 				if body.output then
 					body.output = body.output:gsub("\27%[[0-9;]*m", "")
@@ -167,40 +150,48 @@ return {
 		config = function()
 			local dap = require("dap")
 			local dapui = require("dapui")
-			local function layout(name)
-				return {
-					elements = {
-						{ id = name },
-					},
-					enter = true,
-					size = 120,
+			local layouts = {
+				{
+					elements = { { id = "scopes" } },
+					size = 0.25,
 					position = "right",
-				}
-			end
-			local name_to_layout = {
-				repl = { layout = layout("repl"), index = 0 },
-				stacks = { layout = layout("stacks"), index = 0 },
-				scopes = { layout = layout("scopes"), index = 0 },
-				console = { layout = layout("console"), index = 0 },
-				watches = { layout = layout("watches"), index = 0 },
-				breakpoints = { layout = layout("breakpoints"), index = 0 },
+				},
+				{
+					elements = { { id = "repl" } },
+					size = 0.25,
+					position = "bottom",
+				},
+				{
+					elements = { { id = "console" } },
+					size = 0.25,
+					position = "bottom",
+				},
+				{
+					elements = { { id = "watches" } },
+					size = 0.25,
+					position = "right",
+				},
+				{
+					elements = { { id = "breakpoints" } },
+					size = 0.25,
+					position = "right",
+				},
+				{
+					elements = { { id = "stacks" } },
+					size = 0.25,
+					position = "right",
+				},
 			}
-			local layouts = {}
-
-			for name, config in pairs(name_to_layout) do
-				table.insert(layouts, config.layout)
-				name_to_layout[name].index = #layouts
-			end
 
 			local function toggle_debug_ui(name)
 				dapui.close()
-				local layout_config = name_to_layout[name]
-
-				if layout_config == nil then
-					error(string.format("bad name: %s", name))
+				for i, layout in ipairs(layouts) do
+					if layout.elements[1].id == name then
+						dapui.toggle(i)
+						return
+					end
 				end
-
-				dapui.toggle(layout_config.index)
+				error(string.format("bad name: %s", name))
 			end
 
 			vim.keymap.set("n", "<leader>dr", function()
@@ -235,7 +226,6 @@ return {
 
 			dapui.setup({
 				layouts = layouts,
-				enter = true,
 			})
 
 			dap.listeners.before.event_terminated.dapui_config = function()
@@ -244,10 +234,9 @@ return {
 			dap.listeners.before.event_exited.dapui_config = function()
 				dapui.close()
 			end
-
 			dap.listeners.after.event_output.dapui_config = function(_, body)
 				if body.category == "console" then
-					dapui.eval(body.output) -- Sends stdout/stderr to Console
+					dapui.eval(body.output)
 				end
 			end
 		end,
@@ -262,10 +251,7 @@ return {
 		},
 		config = function()
 			require("mason-nvim-dap").setup({
-				ensure_installed = {
-					"delve",
-					"js-debug-adapter",
-				},
+				ensure_installed = { "delve", "js-debug-adapter" },
 				automatic_installation = true,
 				handlers = {
 					function(config)
