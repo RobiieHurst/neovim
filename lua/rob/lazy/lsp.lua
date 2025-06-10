@@ -29,6 +29,25 @@ return {
 		local lspconfig = require("lspconfig")
 		local util = require("lspconfig.util")
 
+		lspconfig.lua_ls.setup({
+			settings = {
+				Lua = {
+					runtime = {
+						version = "Lua 5.1", -- LÖVE2D uses Lua 5.1
+						path = vim.split(package.path, ";"),
+					},
+					diagnostics = {
+						globals = { "vim", "love" }, -- Recognize LÖVE2D's 'love' global
+					},
+					workspace = {
+						userThirdParty = { os.getenv("HOME") .. ".config/love2d-defs" },
+						checkThirdParty = "Apply", -- Avoid unnecessary prompts
+					},
+					telemetry = { enable = false },
+				},
+			},
+		})
+
 		-- Function to resolve local Biome binary
 		local function resolve_biome()
 			local biome_path = vim.fn.findfile("node_modules/.bin/biome", vim.fn.getcwd() .. ";")
@@ -67,7 +86,6 @@ return {
 				end,
 
 				ts_ls = function()
-					local lspconfig = require("lspconfig")
 					lspconfig.ts_ls.setup({
 						filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
 						root_dir = require("lspconfig.util").root_pattern("jsconfig.json", "tsconfig.json", ".git"),
@@ -81,14 +99,12 @@ return {
 				end,
 
 				marksman = function()
-					local lspconfig = require("lspconfig")
 					lspconfig.marksman.setup({
 						capabilities = capabilities,
 					})
 				end,
 
 				zls = function()
-					local lspconfig = require("lspconfig")
 					lspconfig.zls.setup({
 						root_dir = lspconfig.util.root_pattern(".git", "build.zig", "zls.json"),
 						settings = {
@@ -101,20 +117,6 @@ return {
 					})
 					vim.g.zig_fmt_parse_errors = 0
 					vim.g.zig_fmt_autosave = 0
-				end,
-				["lua_ls"] = function()
-					local lspconfig = require("lspconfig")
-					lspconfig.lua_ls.setup({
-						capabilities = capabilities,
-						settings = {
-							Lua = {
-								runtime = { version = "Lua 5.1" },
-								diagnostics = {
-									globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
-								},
-							},
-						},
-					})
 				end,
 			},
 		})
@@ -134,11 +136,10 @@ return {
 				["<C-Space>"] = cmp.mapping.complete(),
 			}),
 			sources = cmp.config.sources({
-				{ name = "copilot", group_index = 2 },
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" }, -- For luasnip users.
-			}, {
 				{ name = "buffer" },
+				{ name = "path" },
 			}),
 		})
 
