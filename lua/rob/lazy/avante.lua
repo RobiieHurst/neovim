@@ -16,8 +16,8 @@ return {
 				focus_on_apply = "ours", -- which diff to focus after applying
 			},
 		},
-		provider = "openFour",
-		vendors = {
+		provider = "claude4",
+		providers = {
 			googleFlash = {
 				__inherited_from = "openai",
 				endpoint = "https://openrouter.ai/api/v1",
@@ -30,24 +30,30 @@ return {
 				api_key_name = "OPENROUTER_API_KEY",
 				model = "anthropic/claude-3.7-sonnet",
 			},
+			claude4 = {
+				__inherited_from = "openai",
+				endpoint = "https://openrouter.ai/api/v1",
+				api_key_name = "OPENROUTER_API_KEY",
+				model = "anthropic/claude-sonnet-4",
+			},
 			deepseek = {
 				__inherited_from = "openai",
 				endpoint = "https://openrouter.ai/api/v1",
 				api_key_name = "OPENROUTER_API_KEY",
 				model = "deepseek/deepseek-r1-distill-llama-70b",
 			},
-      googleGemini= {
+			googleGemini = {
 				__inherited_from = "openai",
 				endpoint = "https://openrouter.ai/api/v1",
 				api_key_name = "OPENROUTER_API_KEY",
 				model = "google/gemini-2.5-pro-exp-03-25:free",
-      },
-      openFour= {
+			},
+			openFour = {
 				__inherited_from = "openai",
 				endpoint = "https://openrouter.ai/api/v1",
 				api_key_name = "OPENROUTER_API_KEY",
 				model = "openai/gpt-4.1",
-      }
+			},
 		},
 		-- openai = {
 		--   endpoint = "https://api.openai.com/v1",

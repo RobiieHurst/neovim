@@ -37,6 +37,17 @@ return {
 				},
 			},
 			{
+				name = "jambo",
+				path = "~/Documents/rob/jambo-vault/",
+				overrides = {
+					templates = {
+						folder = "Templates",
+						date_format = "%Y-%m-%d-%a",
+						time_format = "%H:%M",
+					},
+				},
+			},
+			{
 				name = "sight-script",
 				path = "~/Documents/rob/script-sight/obsidian-vault/",
 			},
