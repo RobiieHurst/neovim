@@ -47,25 +47,25 @@ return {
 					},
 				},
 			},
-			{
-				name = "sight-script",
-				path = "~/Documents/rob/script-sight/obsidian-vault/",
-			},
-			{
-				name = "work",
-				path = "~/Documents/obsidian/robs/",
-			},
-			{
-				name = "personal",
-				path = "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Rob/",
-				overrides = {
-					templates = {
-						folder = "templates",
-						date_format = "%Y-%m-%d-%a",
-						time_format = "%H:%M",
-					},
-				},
-			},
+			-- {
+			-- 	name = "sight-script",
+			-- 	path = "~/Documents/rob/script-sight/obsidian-vault/",
+			-- },
+			-- {
+			-- 	name = "work",
+			-- 	path = "~/Documents/obsidian/robs/",
+			-- },
+			-- {
+			-- 	name = "personal",
+			-- 	path = "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Rob/",
+			-- 	overrides = {
+			-- 		templates = {
+			-- 			folder = "templates",
+			-- 			date_format = "%Y-%m-%d-%a",
+			-- 			time_format = "%H:%M",
+			-- 		},
+			-- 	},
+			-- },
 		},
 
 		-- Optional, set the log level for obsidian.nvim. This is an integer corresponding to one of the log

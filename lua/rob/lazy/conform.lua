@@ -20,6 +20,7 @@ return {
 			-- You can customize some of the format options for the filetype (:help conform.format)
 			rust = { "rustfmt", lsp_format = "fallback" },
 			-- Conform will run the first available formatter
+			go = { "gofumpt" },
 			javascript = { "biome" },
 			typescript = { "biome" },
 			typescriptreact = { "biome" },
