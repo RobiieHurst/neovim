@@ -15,3 +15,5 @@ require("lazy").setup({
 	spec = "rob.lazy",
 	change_detection = { notify = false },
 })
+
+vim.cmd.colorscheme("catppuccin")
