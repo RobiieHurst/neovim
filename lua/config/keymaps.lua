@@ -119,4 +119,3 @@ vim.keymap.set("n", "<leader>pE", function()
 		hidden = true,
 	})
 end, { desc = "Find .env files" })
-
